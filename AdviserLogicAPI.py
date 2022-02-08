@@ -77,7 +77,6 @@ class AdviserLogicAPI:
         if self.is_authenticated():
 
             data = self.get_client_data(adl_client_id, url_endpoint_suffix)
-            
             value = data
             for key in key_path_list:
                 value = value[key]
