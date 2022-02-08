@@ -30,8 +30,7 @@ class AdviserLogicAPI:
         if response.status_code != 200:
             raise APIHealthFail
 
-        response = requests.get(self._base_url + 'custom-form-schema',
-        headers=self.headers)
+        response = requests.get(self._base_url + 'custom-form-schema', headers=self.headers)
         if response.status_code != 200:
             raise AuthenticationFail
         else:
@@ -61,8 +60,7 @@ class AdviserLogicAPI:
         if self.is_authenticated():
 
             self.headers['adlClientID'] = adl_client_id
-            response = requests.get(self._base_url + 'client' + url_endpoint_suffix,
-            headers=self.headers)
+            response = requests.get(self._base_url + 'client' + url_endpoint_suffix, headers=self.headers)
 
             if response.status_code != 200:
                 raise ResourceNotFoundError
@@ -74,14 +72,12 @@ class AdviserLogicAPI:
         else:
             raise AuthenticationFail
 
-    def get_specific_client_data(self, adl_client_id, url_endpoint_suffix, key_path):
+    def get_specific_client_data(self, adl_client_id, url_endpoint_suffix, key_path_list):
 
         if self.is_authenticated():
 
             data = self.get_client_data(adl_client_id, url_endpoint_suffix)
             
-            key_path_list = key_path.split('/')
-
             value = data
             for key in key_path_list:
                 value = value[key]
@@ -92,14 +88,12 @@ class AdviserLogicAPI:
             raise AuthenticationFail
 
 
-    def put_client_data(self, adl_client_id, url_endpoint_suffix, key_path, value):
+    def put_client_data(self, adl_client_id, url_endpoint_suffix, key_path_list, value):
 
         if self.is_authenticated():
 
             data = self.get_client_data(adl_client_id, url_endpoint_suffix)
             
-            key_path_list = key_path.split('/')
-
             def json_replacer(current_dict):
 
                 for k, v in current_dict.items():
