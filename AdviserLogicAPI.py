@@ -1,14 +1,9 @@
-import os
-from re import S
-from dotenv import load_dotenv
-
+from jinja2 import DictLoader
 import requests
 import json
 from Exceptions import APIHealthFail, AuthenticationFail, ResourceNotFoundError
 
-load_dotenv()
-
-class Get:
+class AdviserLogicAPI:
 
     def __init__(self, key_user_id, key_pwd, param_id):
         """Constructor method for Get class.
@@ -18,7 +13,7 @@ class Get:
         self.param_id = param_id
         self._authenticated = False
         self._base_url = 'https://factfinder.adviserlogic.com/api/v1/'
-        self.headers = {'keyUserID': key_user_id, 
+        self.headers = {'keyUserId': key_user_id, 
                         'keyPwd': key_pwd, 
                         'paramUID': param_id,
                         'adlClientID': ''}
@@ -32,16 +27,14 @@ class Get:
         """Authenticate the API user using Adviser Logic's required parameters.
         """
 
-        # begin by checking the API health
         response = requests.get(self._base_url + 'Status/api-health')
         if response.status_code != 200:
-            raise APIHealthFail()
-        
-        # then, attempt to authenticate the user
+            raise APIHealthFail
+
         response = requests.get(self._base_url + 'custom-form-schema',
         headers=self.headers)
         if response.status_code != 200:
-            raise AuthenticationFail()
+            raise AuthenticationFail
         else:
             self._authenticated = True
         
@@ -69,11 +62,10 @@ class Get:
         if self.is_authenticated():
 
             self.headers['adlClientID'] = adl_client_id
-
             response = requests.get(self._base_url + 'client' + url_endpoint_suffix,
             headers=self.headers)
 
-            if response != 200:
+            if response.status_code != 200:
                 raise ResourceNotFoundError
 
             data = json.loads(response.content)
@@ -81,9 +73,47 @@ class Get:
             return data
             
         else:
-            raise AuthenticationFail()
+            raise AuthenticationFail
+
+    def get_specific_client_data(self, adl_client_id, url_endpoint_suffix, key_path):
+
+        if self.is_authenticated():
+
+            data = self.get_client_data(adl_client_id, url_endpoint_suffix)
+            
+            key_path_list = key_path.split('/')
+
+            current_val = data
+            for key in key_path_list:
+                current_val = current_val[key]
+            
+            return current_val
+        else:
+            raise AuthenticationFail
 
 
-get = Get(os.environ['KEY_USER_ID'], os.environ['KEY_PWD'], os.environ['PARAM_ID'])
+    def put_client_data(self, adl_client_id, url_endpoint_suffix, key_path, value):
 
-print(get.get_content('ADL6289433', '/'))
+        if self.is_authenticated():
+
+            data = self.get_client_data(adl_client_id, url_endpoint_suffix)
+            
+            key_path_list = key_path.split('/')
+
+            def json_replacer(current_dict):
+
+                for k, v in current_dict.items():
+
+                    if k == key_path_list[len(key_path_list) - 1]:
+                        current_dict[k] = value
+                        return
+
+                    if type(v) == dict:
+                        json_replacer(v)
+
+            json_replacer(data)
+
+            response = requests.put(self._base_url + 'client' + url_endpoint_suffix, headers=self.headers, json=data)
+
+        else:
+            raise AuthenticationFail
