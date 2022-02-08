@@ -1,4 +1,3 @@
-from jinja2 import DictLoader
 import requests
 import json
 from Exceptions import APIHealthFail, AuthenticationFail, ResourceNotFoundError
@@ -88,7 +87,7 @@ class AdviserLogicAPI:
                 value = value[key]
             
             return value
-            
+
         else:
             raise AuthenticationFail
 
