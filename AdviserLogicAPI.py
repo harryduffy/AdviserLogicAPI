@@ -83,11 +83,12 @@ class AdviserLogicAPI:
             
             key_path_list = key_path.split('/')
 
-            current_val = data
+            value = data
             for key in key_path_list:
-                current_val = current_val[key]
+                value = value[key]
             
-            return current_val
+            return value
+            
         else:
             raise AuthenticationFail
 
