@@ -110,8 +110,7 @@ class AdviserLogicAPI:
             
             self.i = 0
             def form_json_replacer(current):
-
-                print(current)     
+   
                 if type(current) == dict:
 
                     for k, v in current.items(): 
@@ -154,6 +153,37 @@ class AdviserLogicAPI:
                 data2 = data
                         
             response = requests.put(self._base_url + 'client' + url_endpoint_suffix, headers=self.headers, json=data2)
+
+            return response
+
+        else:
+            raise AuthenticationFail
+        
+
+    def makeshift_post_client_data(self, adl_client_id, url_endpoint_suffix, post_data, form_name):
+
+        if self.is_authenticated():
+
+            
+            self.headers["formName"] = form_name     
+            self.headers['adlClientID'] = adl_client_id        
+            response = requests.post(self._base_url + 'client' + url_endpoint_suffix, headers=self.headers, json=post_data)
+
+            return response
+
+        else:
+            raise AuthenticationFail
+
+
+    def put_client_partner_data(self, adl_client_id, partner_attribute, value):
+
+        if self.is_authenticated():
+
+            data = self.get_client_data(adl_client_id = adl_client_id, url_endpoint_suffix="/")["partner"]
+            
+            data[partner_attribute]= value
+                        
+            response = requests.put(self._base_url + 'client/partner', headers=self.headers, json=data)
 
             return response
 
