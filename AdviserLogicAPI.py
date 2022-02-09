@@ -1,4 +1,3 @@
-from attr import field
 import requests
 import json
 from Exceptions import APIHealthFail, AuthenticationFail, ResourceNotFoundError
