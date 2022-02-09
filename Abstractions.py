@@ -1,11 +1,13 @@
+from subprocess import call
+from time import strftime
 import pandas as pd
 import os
 from dotenv import load_dotenv
+from datetime import datetime, date, timedelta
 from AdviserLogicAPI import AdviserLogicAPI
 
 load_dotenv()
 connector = AdviserLogicAPI(os.environ['KEY_USER_ID'], os.environ['KEY_PWD'], os.environ['PARAM_ID'])
-
 
 class Abstractions:
 
@@ -18,11 +20,21 @@ class Abstractions:
         names = data["Client.Full Name"].to_list()
 
         ids_names_dict = dict(zip(names, adl_ids))
+        date_in_month = (datetime.now() + timedelta(days=30)).strftime('%Y-%m-%d')
+        date_in_month = date.fromisoformat(date_in_month)
+        call_list = {}
         for k, v in ids_names_dict.items():
-            print(k, v)
+            
+            current_client_review_date = connector.get_specific_client_data(v, '/', ['additionalDetails', 'nextReviewDate'])
 
-    
+            if current_client_review_date != None:
+                next_review_date = date.fromisoformat(current_client_review_date)
+                
+                if next_review_date <= date_in_month:
+                    call_list[k] = next_review_date.strftime('%Y-%m-%d')
+                    print(call_list[k])
 
-        # loop through the names and get the aldIDs in a dictionary with the name as the key and value as the aldIDs, then go through the aldIDs and check the last review_date (simple timedelta and print the clients required for a review call)
+
+        return call_list
 
 print(Abstractions.generate_call_list())

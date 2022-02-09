@@ -158,21 +158,6 @@ class AdviserLogicAPI:
 
         else:
             raise AuthenticationFail
-        
-
-    def makeshift_post_client_data(self, adl_client_id, url_endpoint_suffix, post_data, form_name):
-
-        if self.is_authenticated():
-
-            
-            self.headers["formName"] = form_name     
-            self.headers['adlClientID'] = adl_client_id        
-            response = requests.post(self._base_url + 'client' + url_endpoint_suffix, headers=self.headers, json=post_data)
-
-            return response
-
-        else:
-            raise AuthenticationFail
 
 
     def put_client_partner_data(self, adl_client_id, partner_attribute, value):
