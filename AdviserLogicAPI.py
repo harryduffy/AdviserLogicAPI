@@ -1,3 +1,4 @@
+from re import I
 import requests
 import json
 from Exceptions import APIHealthFail, AuthenticationFail, ResourceNotFoundError
@@ -55,19 +56,33 @@ class AdviserLogicAPI:
         - /liabilities
         - /superfund
     """
-    def get_client_data(self, adl_client_id, url_endpoint_suffix):
+    def get_client_data(self, adl_client_id, url_endpoint_suffix, form_name=None):
 
         if self.is_authenticated():
 
-            self.headers['adlClientID'] = adl_client_id
-            response = requests.get(self._base_url + 'client' + url_endpoint_suffix, headers=self.headers)
+            if form_name == None:
+                self.headers['adlClientID'] = adl_client_id
+                response = requests.get(self._base_url + 'client' + url_endpoint_suffix, headers=self.headers)
 
-            if response.status_code != 200:
-                raise ResourceNotFoundError
 
-            data = json.loads(response.content)
+                if response.status_code != 200:
+                    raise ResourceNotFoundError
 
-            return data
+                data = json.loads(response.content)
+
+                return data
+            else:
+                self.headers['adlClientID'] = adl_client_id
+                self.headers['formName'] = form_name
+                response = requests.get(self._base_url + 'client' + url_endpoint_suffix, headers=self.headers)
+
+
+                if response.status_code != 200:
+                    raise ResourceNotFoundError
+
+                data = json.loads(response.content)
+
+                return data
             
         else:
             raise AuthenticationFail
@@ -87,59 +102,58 @@ class AdviserLogicAPI:
             raise AuthenticationFail
 
 
-    def put_client_data(self, adl_client_id, url_endpoint_suffix, key_path_list, value, custom_form =None, custom_variable = None, custom_form_id = None):
+    def put_client_data(self, adl_client_id, url_endpoint_suffix, key_path_list, value, form_name=None):
 
         if self.is_authenticated():
 
-            if custom_form != None:
-                self.headers["formName"] = custom_form
-                data = self.get_client_data(adl_client_id, url_endpoint_suffix)
-                form_dicts = data["clientFormData"]
-                targetted_form_dict = {}
-
-
-                for form_dict in form_dicts:
-                    if form_dict["id"] == custom_form_id:
-                        targetted_form_dict = form_dict
-                
-                if targetted_form_dict =={}:
-                    raise ResourceNotFoundError("No matching custom form found using ID")
-                
-                field_data = targetted_form_dict["fieldData"]
-
-                targetted_field = {}
-                for field_dict in field_data:
-                    if custom_variable in field_dict.values():
-                        targetted_field = field_dict
-
-
-                if targetted_field =={}:
-                    raise ResourceNotFoundError("No matching custom variable found in forms field dictionarys")
-                
-                targetted_field["value"] = value
-
-                response = requests.put(self._base_url + 'client' + url_endpoint_suffix, headers=self.headers, json=data)
-                return response
-
-
-
-
-            data = self.get_client_data(adl_client_id, url_endpoint_suffix)
+            data = self.get_client_data(adl_client_id, url_endpoint_suffix, form_name)
             
-            def json_replacer(current_dict):
+            self.i = 0
+            def form_json_replacer(current):
 
-                for k, v in current_dict.items():
+                print(current)     
+                if type(current) == dict:
 
+                    for k, v in current.items(): 
+                        
+                        if k == key_path_list[len(key_path_list) - 1][1]:
+                            self.i += 1
+                            if self.i == key_path_list[len(key_path_list) - 1][0]:
+                                current[k] = value
+                                return
+
+                        if type(v) == dict or type(v) == list:
+                            form_json_replacer(v)
+
+                elif type(current) == list:
+                    
+                    for item in current:
+                        if item == key_path_list[len(key_path_list) - 1]:
+                            current[current.index(item)] = value
+                            return
+                        
+                        if type(item) == dict or type(item) == list:
+                            form_json_replacer(item)
+            
+            def json_replacer(current):
+                                    
+                for k, v in current.items(): 
+                    
                     if k == key_path_list[len(key_path_list) - 1]:
-                        current_dict[k] = value
+                        current[k] = value
                         return
 
                     if type(v) == dict:
                         json_replacer(v)
 
-            json_replacer(data)
-
-            response = requests.put(self._base_url + 'client' + url_endpoint_suffix, headers=self.headers, json=data)
+            if form_name != None:
+                form_json_replacer(data)
+                data2 = data["clientFormData"][0]
+            else:
+                json_replacer(data)
+                data2 = data
+                        
+            response = requests.put(self._base_url + 'client' + url_endpoint_suffix, headers=self.headers, json=data2)
 
             return response
 
