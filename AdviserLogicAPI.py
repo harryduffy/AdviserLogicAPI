@@ -1,3 +1,4 @@
+from attr import field
 import requests
 import json
 from Exceptions import APIHealthFail, AuthenticationFail, ResourceNotFoundError
@@ -87,9 +88,42 @@ class AdviserLogicAPI:
             raise AuthenticationFail
 
 
-    def put_client_data(self, adl_client_id, url_endpoint_suffix, key_path_list, value):
+    def put_client_data(self, adl_client_id, url_endpoint_suffix, key_path_list, value, custom_form =None, custom_variable = None, custom_form_id = None):
 
         if self.is_authenticated():
+
+            if custom_form != None:
+                self.headers["formName"] = custom_form
+                data = self.get_client_data(adl_client_id, url_endpoint_suffix)
+                form_dicts = data["clientFormData"]
+                targetted_form_dict = {}
+
+
+                for form_dict in form_dicts:
+                    if form_dict["id"] == custom_form_id:
+                        targetted_form_dict = form_dict
+                
+                if targetted_form_dict =={}:
+                    raise ResourceNotFoundError("No matching custom form found using ID")
+                
+                field_data = targetted_form_dict["fieldData"]
+
+                targetted_field = {}
+                for field_dict in field_data:
+                    if custom_variable in field_dict.values():
+                        targetted_field = field_dict
+
+
+                if targetted_field =={}:
+                    raise ResourceNotFoundError("No matching custom variable found in forms field dictionarys")
+                
+                targetted_field["value"] = value
+
+                response = requests.put(self._base_url + 'client' + url_endpoint_suffix, headers=self.headers, json=data)
+                return response
+
+
+
 
             data = self.get_client_data(adl_client_id, url_endpoint_suffix)
             
@@ -107,6 +141,8 @@ class AdviserLogicAPI:
             json_replacer(data)
 
             response = requests.put(self._base_url + 'client' + url_endpoint_suffix, headers=self.headers, json=data)
+
+            return response
 
         else:
             raise AuthenticationFail
