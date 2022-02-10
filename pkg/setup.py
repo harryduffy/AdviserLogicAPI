@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
    name='AdviserLogicAPI',
-   package_dir = {'': 'AdviserLogicAPI'},
+   package_dir = {'': 'pkg'},
    packages=['AdviserLogicAPI'],
    url='https://github.com/harryduffy/AdviserLogicAPI',
    license='',
