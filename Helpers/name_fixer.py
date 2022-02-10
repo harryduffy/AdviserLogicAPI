@@ -192,39 +192,37 @@ def combine_names(n1,n2):
     combined_name = name_dict_to_string(combined_dict)
     return combined_name
 
-# full_names =[]
-# for id in ids:
-#     fname = str(al.get_specific_client_data(id,'/',['clientBasicInfo','firstName']))
-#     sname = str(al.get_specific_client_data(id,'/',['clientBasicInfo','surName']))
-#     pname = str(al.get_specific_client_data(id,'/',['clientBasicInfo','preferredName']))
+def full_names_from_ADLIDs(ids):
+    full_names =[]
+    for id in ids:
+        fname = str(al.get_specific_client_data(id,'/',['clientBasicInfo','firstName']))
+        sname = str(al.get_specific_client_data(id,'/',['clientBasicInfo','surName']))
+        pname = str(al.get_specific_client_data(id,'/',['clientBasicInfo','preferredName']))
 
-#     partner_dict  = al.get_specific_client_data(id,"/", ["partner"])
-#     pfname =''
-#     psname =''
-#     ppname =''
+        partner_dict  = al.get_specific_client_data(id,"/", ["partner"])
+        pfname =''
+        psname =''
+        ppname =''
 
-#     if partner_dict != None :
-#         pfname = str(al.get_specific_client_data(id,'/',['partner','firstName']))
-#         psname = str(al.get_specific_client_data(id,'/',['partner','surName']))
-#         ppname = str(al.get_specific_client_data(id,'/',['partner','preferredName']))
-#     name_ls = []
-#     name_ls = [sname,fname]
-#     if pname != '':
-#         name_ls.append(f'({pname})')
-#     if psname != '' and psname!=sname:
-#         name_ls.append(psname)
-#     if pfname != '':
-#         name_ls.append(pfname)
-#     if ppname != '':
-#         name_ls.append(f'({ppname})')
+        if partner_dict != None :
+            pfname = str(al.get_specific_client_data(id,'/',['partner','firstName']))
+            psname = str(al.get_specific_client_data(id,'/',['partner','surName']))
+            ppname = str(al.get_specific_client_data(id,'/',['partner','preferredName']))
+        name_ls = []
+        name_ls = [sname,fname]
+        if pname != '':
+            name_ls.append(f'({pname})')
+        if psname != '' and psname!=sname:
+            name_ls.append(psname)
+        if pfname != '':
+            name_ls.append(pfname)
+        if ppname != '':
+            name_ls.append(f'({ppname})')
 
-#     full_name = "_".join(name_ls)
+        full_name = "_".join(name_ls)
 
-#     f = open('names.txt',"a")
-#     f.write(full_name)
-#     f.write("@")
-#     f.close()
-#     print(ids.index(id))
+        full_names.append(full_name)
+        return full_names
 
 
 # nm_id_dict = {}
