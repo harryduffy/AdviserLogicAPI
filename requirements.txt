@@ -1,0 +1,5 @@
+pandas==1.4.0
+python-dotenv==0.19.2
+requests==2.26.0
+setuptools==59.6.0
+SharePlum==0.5.1
