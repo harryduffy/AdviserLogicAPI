@@ -1,5 +1,3 @@
-from subprocess import call
-from time import strftime
 import pandas as pd
 import os
 from dotenv import load_dotenv
