@@ -2,7 +2,6 @@ from setuptools import setup
 
 setup(
    name='AdviserLogicAPI',
-   packages=['AdviserLogicAPI'],
    url='https://github.com/harryduffy/AdviserLogicAPI',
    license='',
    version='1.0',
