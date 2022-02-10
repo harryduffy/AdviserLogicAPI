@@ -1,4 +1,4 @@
-from AdviserLogicAPI import AdviserLogicAPI
+from AdviserLogic_API import AdviserLogicAPI
 import os
 from dotenv import load_dotenv
 import pandas as pd
