@@ -2,7 +2,7 @@ import pandas as pd
 import os
 from dotenv import load_dotenv
 from datetime import datetime, date, timedelta
-from ..API.adviserLogicAPI import AdviserLogicAPI
+from .adviserLogicAPI import AdviserLogicAPI
 
 load_dotenv()
 connector = AdviserLogicAPI(os.environ['KEY_USER_ID'], os.environ['KEY_PWD'], os.environ['PARAM_ID'])
