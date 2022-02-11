@@ -1,8 +1,17 @@
 import requests
 import json
-import os, sys
-# sys.path.append(os.path.abspath(__file__).replace("/Calendar/calendly_webhook_manager.py",""))
-from .exceptions import AuthenticationFail, APIHealthFail, ResourceNotFoundError
+
+class APIHealthFail(Exception):
+    def __init__(self):
+        super().__init__(f"The API is not healthy.")
+
+class AuthenticationFail(Exception):
+    def __init__(self):
+        super().__init__(f"The user cannot be authenticated.")
+
+class ResourceNotFoundError(Exception):
+    def __init__(self):
+        super().__init__(f"The resource cannot be found.")
 
 class AdviserLogicAPI:
 
@@ -175,15 +184,3 @@ class AdviserLogicAPI:
 
         else:
             raise AuthenticationFail
-
-class APIHealthFail(Exception):
-    def __init__(self):
-        super().__init__(f"The API is not healthy.")
-
-class AuthenticationFail(Exception):
-    def __init__(self):
-        super().__init__(f"The user cannot be authenticated.")
-
-class ResourceNotFoundError(Exception):
-    def __init__(self):
-        super().__init__(f"The resource cannot be found.")
