@@ -1,6 +1,6 @@
 import requests
 import json
-from ..Exceptions.exceptions import AuthenticationFail, APIHealthFail, ResourceNotFoundError
+from .exceptions import AuthenticationFail, APIHealthFail, ResourceNotFoundError
 
 class AdviserLogicAPI:
 
