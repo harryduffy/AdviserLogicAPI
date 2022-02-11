@@ -1,1 +1,1 @@
-from .exceptions import ResourceNotFoundError
+from .exceptions import ResourceNotFoundError, APIHealthFail, AuthenticationFail
