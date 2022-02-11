@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
    name='AdviserLogicAPI',
-   packages=['AdviserLogicAPI', 'Exceptions'],
+   packages=['API', 'Exceptions'],
    url='https://github.com/harryduffy/AdviserLogicAPI',
    license='',
    version='1.0',
