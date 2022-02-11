@@ -1,4 +1,4 @@
-from AdviserLogic import AdviserLogicAPI
+from AdviserLogic import adviserLogicAPI
 import os
 from dotenv import load_dotenv
 import pandas as pd
@@ -6,7 +6,7 @@ from Exceptions import ResourceNotFoundError
 
 load_dotenv()
 
-connector = AdviserLogicAPI(os.environ['KEY_USER_ID'], os.environ['KEY_PWD'], os.environ['PARAM_ID'])
+connector = adviserLogicAPI(os.environ['KEY_USER_ID'], os.environ['KEY_PWD'], os.environ['PARAM_ID'])
 
 nms_ADLIDs = pd.read_excel("Nms_ADLIDs.xlsx")
 ADLIDs = nms_ADLIDs["Client.ADLID"].to_list()

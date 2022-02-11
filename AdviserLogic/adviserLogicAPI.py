@@ -1,5 +1,7 @@
 import requests
 import json
+import os, sys
+# sys.path.append(os.path.abspath(__file__).replace("/Calendar/calendly_webhook_manager.py",""))
 from .exceptions import AuthenticationFail, APIHealthFail, ResourceNotFoundError
 
 class AdviserLogicAPI:

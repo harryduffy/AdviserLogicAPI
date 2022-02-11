@@ -1,4 +1,4 @@
-from AdviserLogic import AdviserLogicAPI
+from AdviserLogic import adviserLogicAPI
 import os
 from dotenv import load_dotenv
 import pandas as pd
@@ -11,7 +11,7 @@ import subprocess
 
 load_dotenv()
 
-al = AdviserLogicAPI(os.environ['KEY_USER_ID'], os.environ['KEY_PWD'], os.environ['PARAM_ID'])
+al = adviserLogicAPI(os.environ['KEY_USER_ID'], os.environ['KEY_PWD'], os.environ['PARAM_ID'])
 
 nms_ids = pd.read_excel("Nms_ADLIDs.xlsx")
 ids = nms_ids["Client.ADLID"].to_list()
