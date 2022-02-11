@@ -1,4 +1,3 @@
-from re import I
 import requests
 import json
 from Exceptions import APIHealthFail, AuthenticationFail, ResourceNotFoundError
