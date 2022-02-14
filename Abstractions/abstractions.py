@@ -34,5 +34,3 @@ class Abstractions:
 
 
         return call_list
-
-print(Abstractions.generate_call_list())
