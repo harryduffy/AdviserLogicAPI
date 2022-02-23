@@ -208,14 +208,11 @@ def full_names_from_ADLIDs(ids,al):
             psname = basic_info_dict['partner']['surName']
             ppname = basic_info_dict['partner']['preferredName']
 
-
-
         name_ls = []
-        
+        if sname != '' and sname!= None :
+            continue
         if fname != '' and fname != None :
             name_ls.append(f'{fname}')
-        if sname != '' and sname!= None :
-            name_ls.append(f'{sname}')
         if pname != '' and pname != None :
             name_ls.append(f'({pname})')
         if psname != '' and psname!= None and psname!=sname :
