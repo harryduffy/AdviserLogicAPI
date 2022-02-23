@@ -222,6 +222,7 @@ def full_names_from_ADLIDs(ids,al):
         full_name = "_".join(name_ls)
 
         full_names.append(full_name)
+        print(f"Names found {len(full_names)}")
         return full_names
 
 
