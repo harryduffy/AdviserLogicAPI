@@ -11,12 +11,6 @@ import subprocess
 
 load_dotenv()
 
-al = adviserLogicAPI(os.environ['KEY_USER_ID'], os.environ['KEY_PWD'], os.environ['PARAM_ID'])
-
-nms_ids = pd.read_excel("Nms_ADLIDs.xlsx")
-ids = nms_ids["Client.ADLID"].to_list()
-nms = nms_ids["Client.Full Name"].to_list()
-
 def write_name_ls_to_file(full_names,file_name):
 
     f = open(f'{file_name}',"w")
