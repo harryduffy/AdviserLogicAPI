@@ -192,7 +192,7 @@ def combine_names(n1,n2):
     combined_name = name_dict_to_string(combined_dict)
     return combined_name
 
-def full_names_from_ADLIDs(ids):
+def full_names_from_ADLIDs(ids,al):
     full_names =[]
     for id in ids:
         fname = str(al.get_specific_client_data(id,'/',['clientBasicInfo','firstName']))
