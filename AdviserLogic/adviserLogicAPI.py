@@ -3,15 +3,15 @@ import json
 
 class APIHealthFail(Exception):
     def __init__(self):
-        super().__init__(f"The API is not healthy.")
+        super().__init__("The API is not healthy.")
 
 class AuthenticationFail(Exception):
     def __init__(self):
-        super().__init__(f"The user cannot be authenticated.")
+        super().__init__("The user cannot be authenticated.")
 
 class ResourceNotFoundError(Exception):
     def __init__(self):
-        super().__init__(f"The resource cannot be found.")
+        super().__init__("The resource cannot be found.")
 
 class AdviserLogicAPI:
 
@@ -45,6 +45,9 @@ class AdviserLogicAPI:
         if response.status_code != 200:
             raise AuthenticationFail
         else:
+            print()
+            print('User Authenticated...')
+            print()
             self._authenticated = True
         
     def is_authenticated(self):
