@@ -210,6 +210,8 @@ def full_names_from_ADLIDs(ids,al):
 
         name_ls = []
         if sname != '' and sname!= None :
+            name_ls.append(f'{sname}')
+        else: 
             continue
         if fname != '' and fname != None :
             name_ls.append(f'{fname}')
