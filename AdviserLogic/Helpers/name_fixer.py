@@ -50,6 +50,7 @@ def dict_name(client_name):
         'p_pname':''
     }
 
+    couple = False
     if len(name_ls) == 2:
 
         # can only be a single person
@@ -67,6 +68,7 @@ def dict_name(client_name):
             name_dict["fname"]=name_ls[1]
             name_dict["sname"]=name_ls[0]
         else:
+            couple = True
             name_dict["sname"]=name_ls[0]
             name_dict["fname"]=name_ls[1]
             name_dict["p_fname"]=name_ls[2]
@@ -74,8 +76,8 @@ def dict_name(client_name):
             
 
     elif len(name_ls) == 4:
-
         # can either be a couple, same last name, with one nickname or a couple with different last names
+        couple = True
         nickname, index, counter = check_nickname(name_ls)
         
         if nickname:
@@ -104,9 +106,9 @@ def dict_name(client_name):
         
 
     elif len(name_ls) == 5:
-
         # couple, same last name, both with a nickname
         # couple, different last name, with one nickname (two scenarios, depending on location of nickname)
+        couple = True
         nickname, index, counter = check_nickname(name_ls)
         
         first = False
@@ -137,15 +139,16 @@ def dict_name(client_name):
 
 
     elif len(name_ls) == 6:
-        
         # couple, different last name, with two nicknames
+        couple = True
         name_dict["sname"]=name_ls[0]
         name_dict["fname"]=name_ls[1]
         name_dict["pname"]=name_ls[2]
         name_dict["p_sname"]=name_ls[3]
         name_dict["p_fname"]=name_ls[4]
         name_dict["p_pname"]=name_ls[5]
-        
+    
+    name_dict["couple"] = couple
     return name_dict
 
 def check_nickname(name_ls):
@@ -195,19 +198,22 @@ def combine_names(n1,n2):
 def full_names_from_ADLIDs(ids,al):
     full_names =[]
     for id in ids:
-        fname = str(al.get_specific_client_data(id,'/',['clientBasicInfo','firstName']))
-        sname = str(al.get_specific_client_data(id,'/',['clientBasicInfo','surName']))
-        pname = str(al.get_specific_client_data(id,'/',['clientBasicInfo','preferredName']))
 
-        partner_dict  = al.get_specific_client_data(id,"/", ["partner"])
+        basic_info_dict = al.get_client_data(id,'/')
+        fname = basic_info_dict['clientBasicInfo']['firstName']
+        sname = basic_info_dict['clientBasicInfo']['surName']
+        pname = basic_info_dict['clientBasicInfo']['preferredName']
+
+        partner_dict  = basic_info_dict['partner']
         pfname =''
         psname =''
         ppname =''
 
         if partner_dict != None :
-            pfname = str(al.get_specific_client_data(id,'/',['partner','firstName']))
-            psname = str(al.get_specific_client_data(id,'/',['partner','surName']))
-            ppname = str(al.get_specific_client_data(id,'/',['partner','preferredName']))
+            pfname = basic_info_dict['partner']['firstName']
+            psname = basic_info_dict['partner']['surName']
+            ppname = basic_info_dict['partner']['preferredName']
+            
         name_ls = []
         name_ls = [sname,fname]
         if pname != '':
