@@ -217,7 +217,7 @@ def full_names_from_ADLIDs(ids,al):
             full_names.append(full_name)
             print(f"{len(full_names)},{full_name}")
             continue
-        
+        name_ls.append(fname)
         if pname != '' and pname != None :
             name_ls.append(f'({pname})')
         if psname != '' and psname!= None and psname!=sname :
