@@ -209,12 +209,15 @@ def full_names_from_ADLIDs(ids,al):
             ppname = basic_info_dict['partner']['preferredName']
 
         name_ls = []
-        if sname != '' and sname!= None :
-            name_ls.append(f'{sname}')
+        if sname != '' and sname!= None : #If client entity is a Business and thus has no last name
+            name_ls.append(sname)
         else: 
+            name_ls.append(fname)
+            full_name = "_".join(name_ls)
+            full_names.append(full_name)
+            print(f"{len(full_names)},{full_name}")
             continue
-        if fname != '' and fname != None :
-            name_ls.append(f'{fname}')
+        
         if pname != '' and pname != None :
             name_ls.append(f'({pname})')
         if psname != '' and psname!= None and psname!=sname :
@@ -227,7 +230,7 @@ def full_names_from_ADLIDs(ids,al):
         full_name = "_".join(name_ls)
 
         full_names.append(full_name)
-        print(f"Names found {len(full_names)}")
+        print(f"{len(full_names)},{full_name}")
     return full_names
 
 
