@@ -45,9 +45,6 @@ class AdviserLogicAPI:
         if response.status_code != 200:
             raise AuthenticationFail
         else:
-            print()
-            print('User Authenticated...')
-            print()
             self._authenticated = True
         
     def is_authenticated(self):
