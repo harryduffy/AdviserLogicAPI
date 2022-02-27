@@ -189,51 +189,49 @@ def combine_names(n1,n2):
     combined_name = name_dict_to_string(combined_dict)
     return combined_name
 
-def full_names_from_ADLIDs(ids,al):
+def full_names_from_ADLIDs(adl_ids,al):
     full_names =[]
-    for id in ids:
-
-        basic_info_dict = al.get_client_data(id,'/')
-        fname = basic_info_dict['clientBasicInfo']['firstName']
-        sname = basic_info_dict['clientBasicInfo']['surName']
-        pname = basic_info_dict['clientBasicInfo']['preferredName']
-
-        partner_dict  = basic_info_dict['partner']
-        pfname =''
-        psname =''
-        ppname =''
-
-        if partner_dict != None :
-            pfname = basic_info_dict['partner']['firstName']
-            psname = basic_info_dict['partner']['surName']
-            ppname = basic_info_dict['partner']['preferredName']
-
-        name_ls = []
-        if sname != '' and sname!= None : #If client entity is a Business and thus has no last name
-            name_ls.append(sname)
-        else: 
-            name_ls.append(fname)
-            full_name = "_".join(name_ls)
-            full_names.append(full_name)
-            print(f"{len(full_names)},{full_name}")
-            continue
-        name_ls.append(fname)
-        if pname != '' and pname != None :
-            name_ls.append(f'({pname})')
-        if psname != '' and psname!= None and psname!=sname :
-            name_ls.append(psname)
-        if pfname != '' and pfname != None:
-            name_ls.append(pfname)
-        if ppname != '' and ppname != None:
-            name_ls.append(f'({ppname})')
-
-        full_name = "_".join(name_ls)
-
-        full_names.append(full_name)
-        print(f"{len(full_names)},{full_name}")
+    for adl_id in adl_ids:
+        full_names.append(get_full_name_from_adlid(adl_id))
     return full_names
 
 
+def get_full_name_from_adlid(adlid,al):
+    basic_info_dict = al.get_client_data(adlid,'/')
+    fname = basic_info_dict['clientBasicInfo']['firstName']
+    sname = basic_info_dict['clientBasicInfo']['surName']
+    pname = basic_info_dict['clientBasicInfo']['preferredName']
+
+    partner_dict  = basic_info_dict['partner']
+    pfname =''
+    psname =''
+    ppname =''
+
+    if partner_dict != None :
+        pfname = basic_info_dict['partner']['firstName']
+        psname = basic_info_dict['partner']['surName']
+        ppname = basic_info_dict['partner']['preferredName']
+
+    name_ls = []
+    if sname != '' and sname!= None : #If client entity is a Business and thus has no last name
+        name_ls.append(sname)
+    else: 
+        name_ls.append(fname)
+        full_name = "_".join(name_ls)
+        return full_name
+
+    name_ls.append(fname)
+    if pname != '' and pname != None :
+        name_ls.append(f'({pname})')
+    if psname != '' and psname!= None and psname!=sname :
+        name_ls.append(psname)
+    if pfname != '' and pfname != None:
+        name_ls.append(pfname)
+    if ppname != '' and ppname != None:
+        name_ls.append(f'({ppname})')
+
+    full_name = "_".join(name_ls)
+    return full_name
 # nm_id_dict = {}
 # al_nms_full = get_list_of_names_from_file("names2.txt")
 # nm_id_zip = zip(al_nms_full,ids)
