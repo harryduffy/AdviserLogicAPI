@@ -1,5 +1,5 @@
 # AdviserLogic API
-This project provides the pythonic, programmatic basis for Financial Advisors to interact with Morningstars AdviserLogic tool.
+This project provides the pythonic, programmatic basis for Financial Advisors to interact with Morningstars AdviserLogic API.
 
 The capabilities of this project include:
 - getting 'chunks' of client data in the form of JSON objects
