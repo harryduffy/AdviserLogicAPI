@@ -66,6 +66,36 @@ class AdviserLogicAPI:
         - /liabilities
         - /superfund
     """
+    def get_client_list(self):
+
+        if self.is_authenticated():
+            response = requests.get(self._base_url + 'client/list', headers=self.headers)
+            data = json.loads(response.content)
+
+            return data
+            # if form_name == None:
+            #     self.headers['adlClientID'] = adl_client_id
+                
+
+
+            #     if response.status_code != 200:
+            #         raise ResourceNotFoundError
+
+            #     data = json.loads(response.content)
+
+            #     return data
+            # else:
+            #     self.headers['adlClientID'] = adl_client_id
+            #     self.headers['formName'] = form_name
+            #     response = requests.get(self._base_url + 'client' + url_endpoint_suffix, headers=self.headers)
+
+
+            #     if response.status_code != 200:
+            #         raise ResourceNotFoundError
+
+        else:
+            raise AuthenticationFail
+
     def get_client_data(self, adl_client_id, url_endpoint_suffix, form_name=None):
 
         if self.is_authenticated():
